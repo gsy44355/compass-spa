@@ -69,8 +69,21 @@ function updateLocationUI(data: LocationData) {
 }
 
 // --- Permission & init ---
+function requestGeolocation(): Promise<boolean> {
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition(
+      () => resolve(true),
+      () => {
+        alert('Compass requires location permission to display coordinates, altitude and pressure.');
+        resolve(false);
+      },
+      { enableHighAccuracy: true, timeout: 15000 }
+    );
+  });
+}
+
 async function requestPermissions(): Promise<boolean> {
-  // Request DeviceOrientation permission (iOS 13+)
+  // 1. Request DeviceOrientation permission (iOS 13+)
   const DOE = DeviceOrientationEvent as unknown as {
     requestPermission?: () => Promise<string>;
   };
@@ -82,6 +95,10 @@ async function requestPermissions(): Promise<boolean> {
       return false;
     }
   }
+
+  // 2. Request Geolocation permission (must be in user gesture context)
+  const geoGranted = await requestGeolocation();
+  if (!geoGranted) return false;
 
   return true;
 }
