@@ -1,0 +1,270 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  background: linear-gradient(160deg, #0a0e27 0%, #1a1040 40%, #0d1b3e 70%, #0a0e27 100%);
+  color: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ========== Welcome Screen ========== */
+.welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.welcome-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 24px;
+  padding: 48px 36px;
+  text-align: center;
+  max-width: 320px;
+  width: 100%;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.welcome-icon {
+  margin-bottom: 20px;
+}
+
+.welcome-card h1 {
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.welcome-card p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.welcome-card button {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 14px 48px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.welcome-card button:active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.97);
+}
+
+/* ========== App Layout ========== */
+.app {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  gap: 20px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* ========== Compass ========== */
+.compass-wrapper {
+  position: relative;
+  width: min(70vw, 280px);
+  height: min(70vw, 280px);
+  flex-shrink: 0;
+}
+
+.compass-ring {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+  box-shadow:
+    0 0 60px rgba(100, 120, 255, 0.08),
+    inset 0 0 40px rgba(255, 255, 255, 0.02);
+}
+
+.compass-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#compass-dial {
+  transform-origin: 140px 140px;
+  will-change: transform;
+  transition: transform 0.15s ease-out;
+}
+
+/* Tick styles */
+.tick { stroke: rgba(255, 255, 255, 0.25); }
+.tick-major { stroke: rgba(255, 255, 255, 0.5); }
+.tick-n { stroke: #e74c3c; }
+
+.dir-text {
+  fill: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-family: -apple-system, sans-serif;
+  font-weight: 500;
+}
+
+.dir-n {
+  fill: #e74c3c;
+  font-size: 16px;
+  font-family: -apple-system, sans-serif;
+  font-weight: 700;
+}
+
+/* Needle */
+.needle-n { fill: #e74c3c; filter: drop-shadow(0 0 6px rgba(231, 76, 60, 0.4)); }
+.needle-s { fill: rgba(255, 255, 255, 0.4); }
+.needle-center { fill: #fff; filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3)); }
+
+/* ========== Heading Display ========== */
+.heading-display {
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.heading-number {
+  font-size: 48px;
+  font-weight: 200;
+  letter-spacing: -2px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.heading-direction {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ========== Data Cards ========== */
+.data-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+  flex-shrink: 0;
+}
+
+.data-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.data-card:nth-child(1) { box-shadow: 0 4px 24px rgba(100, 140, 255, 0.06); }
+.data-card:nth-child(2) { box-shadow: 0 4px 24px rgba(120, 200, 160, 0.06); }
+.data-card:nth-child(3) { box-shadow: 0 4px 24px rgba(200, 160, 100, 0.06); }
+.data-card:nth-child(4) { box-shadow: 0 4px 24px rgba(160, 120, 200, 0.06); }
+
+.data-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.data-value {
+  font-size: 18px;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+  line-height: 1.4;
+}
+
+.data-value .unit {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-left: 2px;
+}
+
+.region-value {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* ========== Animations ========== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Small screens ========== */
+@media (max-height: 667px) {
+  .compass-wrapper {
+    width: min(60vw, 240px);
+    height: min(60vw, 240px);
+  }
+  .heading-number { font-size: 40px; }
+  .data-card { padding: 12px; }
+  .data-value { font-size: 16px; }
+  .app { gap: 16px; }
+}

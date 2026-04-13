@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0a0e27" />
+  <title>Compass</title>
+</head>
+<body>
+
+  <!-- Welcome screen (first visit) -->
+  <div id="welcome" class="welcome hidden">
+    <div class="welcome-card">
+      <div class="welcome-icon">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="22" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <polygon points="24,8 22,24 24,22 26,24" fill="#e74c3c"/>
+          <polygon points="24,40 22,24 24,26 26,24" fill="rgba(255,255,255,0.5)"/>
+          <circle cx="24" cy="24" r="3" fill="white"/>
+        </svg>
+      </div>
+      <h1>Compass</h1>
+      <p>Access your device's compass, GPS, and atmospheric data.</p>
+      <button id="start-btn" type="button">Start</button>
+    </div>
+  </div>
+
+  <!-- Main app -->
+  <div id="app" class="app hidden">
+    <!-- Compass -->
+    <div class="compass-wrapper">
+      <div class="compass-ring">
+        <svg id="compass-svg" class="compass-svg" viewBox="0 0 280 280">
+          <!-- Tick marks -->
+          <g id="compass-dial">
+            <!-- N -->
+            <line x1="140" y1="20" x2="140" y2="38" stroke-width="2.5" class="tick-n"/>
+            <!-- Major ticks: 30, 60, 90(E), 120, 150, 180(S), 210, 240, 270(W), 300, 330 -->
+            <line x1="200" y1="36.4" x2="192" y2="50.3" stroke-width="1.5" class="tick-major"/>
+            <line x1="243.6" y1="80" x2="229.7" y2="88" stroke-width="1.5" class="tick-major"/>
+            <line x1="260" y1="140" x2="242" y2="140" stroke-width="1.5" class="tick-major"/>
+            <line x1="243.6" y1="200" x2="229.7" y2="192" stroke-width="1.5" class="tick-major"/>
+            <line x1="200" y1="243.6" x2="192" y2="229.7" stroke-width="1.5" class="tick-major"/>
+            <line x1="140" y1="260" x2="140" y2="242" stroke-width="1.5" class="tick-major"/>
+            <line x1="80" y1="243.6" x2="88" y2="229.7" stroke-width="1.5" class="tick-major"/>
+            <line x1="36.4" y1="200" x2="50.3" y2="192" stroke-width="1.5" class="tick-major"/>
+            <line x1="20" y1="140" x2="38" y2="140" stroke-width="1.5" class="tick-major"/>
+            <line x1="36.4" y1="80" x2="50.3" y2="88" stroke-width="1.5" class="tick-major"/>
+            <line x1="80" y1="36.4" x2="88" y2="50.3" stroke-width="1.5" class="tick-major"/>
+            <!-- Minor ticks -->
+            <line x1="157" y1="21" x2="155" y2="33" stroke-width="0.8" class="tick"/>
+            <line x1="174" y1="25" x2="170" y2="36" stroke-width="0.8" class="tick"/>
+            <line x1="213" y1="47" x2="207" y2="57" stroke-width="0.8" class="tick"/>
+            <line x1="223" y1="60" x2="216" y2="69" stroke-width="0.8" class="tick"/>
+            <line x1="247" y1="97" x2="236" y2="102" stroke-width="0.8" class="tick"/>
+            <line x1="252" y1="115" x2="240" y2="118" stroke-width="0.8" class="tick"/>
+            <line x1="252" y1="165" x2="240" y2="162" stroke-width="0.8" class="tick"/>
+            <line x1="247" y1="183" x2="236" y2="178" stroke-width="0.8" class="tick"/>
+            <line x1="223" y1="220" x2="216" y2="211" stroke-width="0.8" class="tick"/>
+            <line x1="213" y1="233" x2="207" y2="223" stroke-width="0.8" class="tick"/>
+            <line x1="174" y1="255" x2="170" y2="244" stroke-width="0.8" class="tick"/>
+            <line x1="157" y1="259" x2="155" y2="247" stroke-width="0.8" class="tick"/>
+            <line x1="123" y1="259" x2="125" y2="247" stroke-width="0.8" class="tick"/>
+            <line x1="106" y1="255" x2="110" y2="244" stroke-width="0.8" class="tick"/>
+            <line x1="67" y1="233" x2="73" y2="223" stroke-width="0.8" class="tick"/>
+            <line x1="57" y1="220" x2="64" y2="211" stroke-width="0.8" class="tick"/>
+            <line x1="33" y1="183" x2="44" y2="178" stroke-width="0.8" class="tick"/>
+            <line x1="28" y1="165" x2="40" y2="162" stroke-width="0.8" class="tick"/>
+            <line x1="28" y1="115" x2="40" y2="118" stroke-width="0.8" class="tick"/>
+            <line x1="33" y1="97" x2="44" y2="102" stroke-width="0.8" class="tick"/>
+            <line x1="57" y1="60" x2="64" y2="69" stroke-width="0.8" class="tick"/>
+            <line x1="67" y1="47" x2="73" y2="57" stroke-width="0.8" class="tick"/>
+            <line x1="106" y1="25" x2="110" y2="36" stroke-width="0.8" class="tick"/>
+            <line x1="123" y1="21" x2="125" y2="33" stroke-width="0.8" class="tick"/>
+            <!-- Direction labels -->
+            <text x="140" y="56" text-anchor="middle" class="dir-n">N</text>
+            <text x="232" y="145" text-anchor="middle" class="dir-text">E</text>
+            <text x="140" y="236" text-anchor="middle" class="dir-text">S</text>
+            <text x="48" y="145" text-anchor="middle" class="dir-text">W</text>
+          </g>
+          <!-- Needle (does not rotate with dial) -->
+          <g id="compass-needle">
+            <polygon points="140,50 136,140 140,130 144,140" class="needle-n"/>
+            <polygon points="140,230 136,140 140,150 144,140" class="needle-s"/>
+            <circle cx="140" cy="140" r="5" class="needle-center"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Heading display -->
+    <div class="heading-display">
+      <div class="heading-number" id="heading-deg">—°</div>
+      <div class="heading-direction" id="heading-dir">—</div>
+    </div>
+
+    <!-- Data cards -->
+    <div class="data-grid">
+      <div class="data-card">
+        <div class="data-label">Lat / Lng</div>
+        <div class="data-value" id="data-latlng">—</div>
+      </div>
+      <div class="data-card">
+        <div class="data-label">Region</div>
+        <div class="data-value region-value" id="data-region">—</div>
+      </div>
+      <div class="data-card">
+        <div class="data-label">Altitude</div>
+        <div class="data-value" id="data-altitude">—</div>
+      </div>
+      <div class="data-card">
+        <div class="data-label">Pressure</div>
+        <div class="data-value" id="data-pressure">—</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
