@@ -69,19 +69,6 @@ function updateLocationUI(data: LocationData) {
 }
 
 // --- Permission & init ---
-function requestGeolocation(): Promise<boolean> {
-  return new Promise((resolve) => {
-    navigator.geolocation.getCurrentPosition(
-      () => resolve(true),
-      () => {
-        alert('Compass requires location permission to display coordinates, altitude and pressure.');
-        resolve(false);
-      },
-      { enableHighAccuracy: true, timeout: 15000 }
-    );
-  });
-}
-
 async function requestPermissions(): Promise<boolean> {
   // 1. Request DeviceOrientation permission (iOS 13+)
   const DOE = DeviceOrientationEvent as unknown as {
@@ -96,9 +83,25 @@ async function requestPermissions(): Promise<boolean> {
     }
   }
 
-  // 2. Request Geolocation permission (must be in user gesture context)
-  const geoGranted = await requestGeolocation();
-  if (!geoGranted) return false;
+  // 2. Request Geolocation — triggers iOS permission dialog
+  //    Use a long timeout and don't require high accuracy for the initial permission prompt
+  try {
+    await new Promise<void>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        () => resolve(),
+        (err) => reject(err),
+        { enableHighAccuracy: false, timeout: 30000, maximumAge: 60000 }
+      );
+    });
+  } catch (err) {
+    const geoErr = err as GeolocationPositionError;
+    // code 1 = PERMISSION_DENIED, 2 = POSITION_UNAVAILABLE, 3 = TIMEOUT
+    if (geoErr.code === 1) {
+      alert('Location permission denied. Please enable location access for this site in Settings > Safari > Location.');
+      return false;
+    }
+    // For timeout or position unavailable, proceed anyway — watchPosition will keep trying
+  }
 
   return true;
 }
@@ -108,8 +111,8 @@ function showApp() {
   $app.classList.remove('hidden');
 
   startCompass();
-  startLocation(updateLocationUI, (msg) => {
-    console.warn('Location error:', msg);
+  startLocation(updateLocationUI, (_msg) => {
+    // Location error — data cards stay as "—", compass still works
   });
 }
 
